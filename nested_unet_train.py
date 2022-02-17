@@ -215,6 +215,8 @@ def main():
     model = archs.__dict__[config['arch']](config['num_classes'],
                                            config['input_channels'],
                                            config['deep_supervision'])
+    # model = archs.__dict__[config['arch']](config['num_classes'],
+    #                                        config['input_channels'])
 
     model = model.cuda()
 
@@ -294,7 +296,8 @@ def main():
               % (train_log['loss'], train_log['iou'], val_log['loss'], val_log['iou']))
 
         log['epoch'].append(epoch)
-        log['lr'].append(config['lr'])  # optimizer.param_groups[0]['lr']
+        # log['lr'].append(config['lr'])  # optimizer.param_groups[0]['lr']
+        log['lr'].append(optimizer.param_groups[0]['lr'])
         log['loss'].append(train_log['loss'])
         log['iou'].append(train_log['iou'])
         log['val_loss'].append(val_log['loss'])
