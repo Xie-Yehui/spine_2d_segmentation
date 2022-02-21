@@ -1,17 +1,14 @@
 import sys
 import os
 import shutil
-import torch
 import time
 import cv2.cv2 as cv
-import numpy as np
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QLabel
 from PyQt5.QtGui import QPixmap
 from PyQt5 import uic, QtCore, QtGui, QtWidgets
 import argparse
 import torch
 import torch.backends.cudnn as cudnn
-import torchvision.transforms as transforms
 import yaml
 from tqdm import tqdm
 from network import archs
@@ -20,7 +17,7 @@ from utils.dataset import ISBI_Loader
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--name', default='dsb2018_96_NestedUNet_woDS', help='model name')
+    parser.add_argument('--name', default='02-17_19-53-31_NestedUNet_woDS', help='model name')
 
     args = parser.parse_args()
 
@@ -28,7 +25,7 @@ def parse_args():
 
 class ImageProcess_ui:
     def __init__(self):
-        self.ui = uic.loadUi("ImageProcess_ui.ui")
+        self.ui = uic.loadUi("ImageProcess.ui")
         self.ui.pushButton_select.clicked.connect(self.openimage)
         self.ui.pushButton_sementic.clicked.connect(self.grayimage)
 
@@ -55,9 +52,10 @@ class ImageProcess_ui:
         print(localtime, "：图片处理中...")
         model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'],
                                                config['deep_supervision'])
+        # model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'])
 
         model = model.cuda()
-        model.load_state_dict(torch.load('Result/%s/model.pth' % config['name']))
+        model.load_state_dict(torch.load('Result/%s/best_model.pth' % args.name))
         model.eval()
 
         image_pathh = './tempt_dir/*'

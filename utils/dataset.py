@@ -71,4 +71,4 @@ if __name__ == "__main__":
     image_pathh = '../data/test/image/*'
     label_pathh = '../data/test/label/*'
     test_dataset = ISBI_Loader(image_pathh, label_pathh)
-    print("验证集数据个数：", len(test_dataset))
+    print("测试集数据个数：", len(test_dataset))
