@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import csv
 
-file = open('./Result/02-17_20-55-08_UNet_woDS/log.csv')
+file = open('./Result/02-17_19-53-31_NestedUNet_woDS/log.csv')
 data = list(csv.reader(file))
 row = len(data)
 col = len(data[0])

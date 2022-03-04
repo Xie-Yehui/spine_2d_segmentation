@@ -17,7 +17,7 @@ from utils.dataset import ISBI_Loader
 def parse_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--name', default='02-17_19-53-31_NestedUNet_woDS', help='model name')
+    parser.add_argument('--name', default='02-21_13-46-57_UNet_woDS', help='model name')
 
     args = parser.parse_args()
 
@@ -27,7 +27,7 @@ class ImageProcess_ui:
     def __init__(self):
         self.ui = uic.loadUi("ImageProcess.ui")
         self.ui.pushButton_select.clicked.connect(self.openimage)
-        self.ui.pushButton_sementic.clicked.connect(self.grayimage)
+        self.ui.pushButton_sementic.clicked.connect(self.image_process)
 
     def openimage(self):
         imgName, imgType = QFileDialog.getOpenFileName(self.ui, "打开图片", "", "All Files(*);;*.png;;*.jpg")
@@ -41,7 +41,7 @@ class ImageProcess_ui:
         os.makedirs('tempt_dir/01', exist_ok=True)
         shutil.copyfile(img_path, target_path)
 
-    def grayimage(self):
+    def image_process(self):
         args = parse_args()
         with open('Result/%s/config.yml' % args.name, 'r') as f:
             config = yaml.load(f, Loader=yaml.FullLoader)
@@ -50,9 +50,9 @@ class ImageProcess_ui:
 
         localtime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         print(localtime, "：图片处理中...")
-        model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'],
-                                               config['deep_supervision'])
-        # model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'])
+        # model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'],
+        #                                        config['deep_supervision'])
+        model = archs.__dict__[config['arch']](config['num_classes'], config['input_channels'])
 
         model = model.cuda()
         model.load_state_dict(torch.load('Result/%s/best_model.pth' % args.name))
